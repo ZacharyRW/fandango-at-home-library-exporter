@@ -54,8 +54,8 @@ VuduList/
   - Limited configuration options
 - **Line Count:** 87 lines
 
-#### 3. `vuduupdatedbyOpenAI` (Most Recent - PRODUCTION)
-- **Status:** Current production version
+#### 3. `vuduupdatedbyOpenAI` (Current Reference Implementation)
+- **Status:** Current reference implementation in this repository
 - **Major improvements:**
   - **Modular architecture** with dataclasses and type hints
   - **CLI argument parsing** with argparse
@@ -99,11 +99,9 @@ dcddcb0 Updated the code using Claude AI
 437b49b Rename vuduupdatedbyclaude to vuduupdatedbyclaude.py
   └─> File extension fix
 
-48a0761 Updated Vudu.py using OpenAI (HEAD)
+48a0761 Updated Vudu.py using OpenAI
   └─> vuduupdatedbyOpenAI created (production-grade refactor)
 ```
-
-**Current Branch:** `claude/claude-md-mi6aojebgwbdecw9-01JStep6YYu1dSySZBFcZk1z`
 
 ---
 
@@ -134,7 +132,7 @@ dcddcb0 Updated the code using Claude AI
 ### 1. Code Style
 - **Indentation:** 4 spaces (PEP 8 compliant)
 - **Imports:** Grouped by standard library, third-party, local
-- **Type hints:** Extensive use in production version (`vuduupdatedbyOpenAI`)
+- **Type hints:** Extensive use in the current reference implementation (`vuduupdatedbyOpenAI`)
 - **Docstrings:** Present on module and key functions
 - **Comments:** Inline with "Why:" explanations for non-obvious decisions
 
@@ -300,8 +298,14 @@ Currently hardcoded to `#my_vudu/my_movies`
 ## Git Workflow
 
 ### Branch Naming Convention
-- **Feature branches:** `claude/claude-md-<hash>-<session-id>`
-- **Current branch:** `claude/claude-md-mi6aojebgwbdecw9-01JStep6YYu1dSySZBFcZk1z`
+- Feature branches have historically used names like `claude/claude-md-<hash>-<session-id>`.
+- Do not hardcode a current branch in this file. Before making branch-dependent claims or push decisions, run:
+
+```bash
+git branch --show-current
+git rev-parse --short HEAD
+git status --short
+```
 
 ### Commit Message Style
 Based on recent commits:
@@ -316,9 +320,9 @@ Based on recent commits:
 4. When user explicitly requests
 
 ### Push Strategy
-- Always push to the designated claude/* branch
-- Use: `git push -u origin <branch-name>`
-- Never force push without user permission
+- Push only when the user explicitly requests it.
+- Push from the branch confirmed at runtime; do not assume a historical `claude/*` branch is still current.
+- Never force push without user permission.
 
 ---
 
@@ -522,7 +526,7 @@ python vuduupdatedbyOpenAI \
 **Last Updated:** 2025-11-19
 **Author:** Claude (Anthropic AI)
 **Repository:** https://github.com/ZacharyRW/VuduList
-**Current Branch:** `claude/claude-md-mi6aojebgwbdecw9-01JStep6YYu1dSySZBFcZk1z`
+**Last verified:** 2026-07-09 against commit `dcd0ad8`. Re-run `git branch --show-current`, `git rev-parse --short HEAD`, and `git status --short` before making branch, release, or working-tree claims.
 
 **Update Triggers:**
 - Major code refactors
