@@ -1,6 +1,6 @@
 # Project Analysis
 
-Audit snapshot: 2026-07-14 local time. Code was reviewed at commit 4a8b2365f82743b1a50bb357e85af008b5bbf51d on remote main. The originally inspected commit fd7fde0916bf81966b4aee20ea4dc9e3df0ec1ef has the same Git tree. This document is an evidence-based replacement for planning use; AUDIT.md remains a historical snapshot.
+Review snapshot: 2026-07-14 local time. Code was reviewed at commit 4a8b2365f82743b1a50bb357e85af008b5bbf51d on remote main. The originally inspected commit fd7fde0916bf81966b4aee20ea4dc9e3df0ec1ef has the same Git tree. This document is the evidence-based source for current planning.
 
 ## Executive Summary
 
@@ -79,7 +79,7 @@ The current architecture is a single script with functions that are reasonably s
 | vuduupdatedbyclaude.py | Intermediate modernization with static ChromeDriver path | Historical legacy code; archive or remove after a migration decision |
 | README.md | Public quick-start document | Materially outdated; describes legacy interactive behavior rather than the current CLI |
 | CLAUDE.md | Extensive AI/developer handoff and planning document | Valuable source material but stale and oversized for the current project |
-| AUDIT.md | Prior audit dated 2026-06-16 | Preserve as a historical snapshot; superseded for current planning by this analysis and ROADMAP.md |
+| AGENTS.md | Repository-default guidance | Keep concise and aligned with the current code, analysis, and roadmap |
 | .gitignore | Ignores environment files, virtual environments, IDE state, and bytecode | Reasonable base; does not ignore personal CSV exports |
 | .github/ | Not present | Missing CI, templates, dependency automation, and contribution metadata |
 | tests/ | Not present | Missing unit, integration, and selector regression coverage |
@@ -120,38 +120,38 @@ Environmental limitations:
 
 ### Sources searched
 
-The audit searched all tracked files, Git history, local and remote branch metadata, public GitHub metadata available through the connected service, closed issues and pull requests, and planning language in AUDIT.md and CLAUDE.md. No source TODO, FIXME, HACK, BUG, XXX, disabled test, skipped test, placeholder implementation, or commented-out feature block was found outside the documents and legacy code described below.
+This review searched all tracked files, Git history, local and remote branch metadata, public GitHub metadata available through the connected service, closed issues and pull requests, and existing planning language. No source TODO, FIXME, HACK, BUG, XXX, disabled test, skipped test, placeholder implementation, or commented-out feature block was found outside the documents and legacy code described below.
 
-### Prior AUDIT.md findings
+### Reconciled prior findings
 
 | Existing item | Source | Current status | Verification | Still relevant? | Recommended action |
 | --- | --- | --- | --- | --- | --- |
-| N-1: Vudu rebrand and stale URLs/selectors | AUDIT.md | Partially confirmed | Configured My Movies URL redirected anonymously to Fandango at Home; no authenticated selector test was authorized | Yes | Perform an authorized live contract check before code changes or release |
-| N-2: canonical file lacks .py extension | AUDIT.md | Confirmed | vuduupdatedbyOpenAI is extensionless and normal Python import fails | Yes | Rename to a conventional module name during consolidation |
-| N-3: no requirements file | AUDIT.md; DEP-1; DOC-4 | Confirmed | No requirements.txt, pyproject.toml, lockfile, or dependency metadata exists; Selenium is absent locally | Yes | Add a single authoritative dependency definition and supported-version policy |
-| N-4: alt-only title extraction is fragile | AUDIT.md | Partially confirmed | collect_visible_titles reads only image alt; live failure was not observed | Yes | Validate current DOM and add selector fallbacks plus fixture coverage |
-| N-5: fixed polling sleep in scrolling | AUDIT.md | Confirmed design risk | Current loop sleeps five times for 0.2 seconds after every scroll | Yes | Replace or augment with a count-change/ready-state wait and measure behavior |
-| N-6: os.makedirs empty-parent bug | AUDIT.md | Already fixed / false positive | Current code uses dirname(abspath(out_path)), which is non-empty for a bare file name | No | Remove from active backlog; retain only a test for output paths |
-| N-7: login does not verify success | AUDIT.md | Partially confirmed, with a confirmed weak predicate | The post-submit predicate only checks that the URL contains vudu.com, which is already true on the login URL | Yes | Wait for a post-authenticated library element or a known authenticated URL/state |
-| N-8: unconditional --no-sandbox | AUDIT.md | Confirmed hardening concern | Current driver options always add --no-sandbox | Yes | Remove on normal desktops or make an explicit documented compatibility option |
-| N-9: --pass name is a reserved word concern | AUDIT.md | Obsolete as a defect | argparse deliberately maps it to password; Python's reserved word does not cause a functional error | No | Prefer a clearer --password alias only as a compatibility UX improvement |
-| N-10: password in CLI arguments | AUDIT.md; SEC-3 | Confirmed local privacy concern | --pass is accepted and documented; shell history and local process viewers may expose it | Yes | Prefer environment variable or secure prompt input; document the tradeoff |
-| N-11: legacy placeholder credentials | AUDIT.md; SEC-2 | Partially confirmed | vudu.py contains example values, not a real secret; retaining an editable legacy script invites future accidental commits | Yes | Archive/remove legacy scripts and add a secret-scanning check once tooling exists |
-| N-12: three executable variants | AUDIT.md | Confirmed | All three scripts remain executable source candidates with inconsistent behavior | Yes | Establish one canonical entry point and archive the rest |
-| N-13: legacy static ChromeDriver path | AUDIT.md | Confirmed | Intermediate script retains a Windows-specific ChromeDriver path | Yes, only until legacy code is archived | Do not modernize the legacy copy; archive/remove it |
-| N-14: legacy magic scrolling values | AUDIT.md | Confirmed | vudu.py still uses fixed nested scroll counts | Yes, only until legacy code is archived | Do not tune legacy behavior; archive/remove it |
-| N-15: README describes legacy interface | AUDIT.md; DOC-1 | Confirmed | README says credentials and CSV name are prompted; current script uses CLI/env configuration | Yes | Rewrite README after deciding the canonical name and install method |
-| SEC-1: no license | AUDIT.md; DOC-3 | Confirmed governance gap | No LICENSE is tracked | Yes, if the project is intended to be shared | Choose a license with the owner; do not infer one |
-| SEC-4: CAPTCHA/2FA handling | AUDIT.md | Unable to verify | No live login was run and external service behavior is outside repository control | Possibly | Document expected manual authentication behavior; do not treat absence as a security vulnerability |
-| SEC-5: anti-detection flag may conflict with terms | AUDIT.md | Risk requiring external review | --disable-blink-features=AutomationControlled is present; no terms source was verified | Yes | Review current service terms manually and remove unnecessary anti-detection behavior |
-| SEC-6: legacy output overwrites | AUDIT.md | Confirmed legacy behavior | vudu.py uses a fixed Example2.csv name; current script lets the caller choose but still overwrites selected output | Yes, as UX policy | Resolve through legacy archival and an intentional overwrite policy for the current tool |
-| DOC-2: CLAUDE.md is too large/stale | AUDIT.md | Confirmed in substance | The document is 551 lines, not the historical claim of over 1,000; its date/revision metadata is stale | Yes | Keep useful history, move human-facing setup to README, and trim/split operational planning |
-| DOC-5: repository link validity | AUDIT.md | Already fixed | GitHub repository resolves through the connected service | No | Remove from active backlog |
-| DOC-6: no rebrand acknowledgment | AUDIT.md | Partially confirmed | Docs use Vudu only; anonymous navigation shows Fandango at Home branding | Yes | Update naming and note that selectors require validation |
-| CI-1: add lint/type/smoke CI | AUDIT.md | Confirmed need | No workflow or tool configuration exists; proposed import check cannot work until filename/module issue is fixed | Yes | Add CI after packaging and tests are defined |
-| CI-2: selector snapshot test | AUDIT.md | Confirmed need | No fixtures or tests exist; third-party DOM is an external contract | Yes | Capture authorized, sanitized fixtures and test selectors without credentials |
+| N-1: Vudu rebrand and stale URLs/selectors | Prior review | Partially confirmed | Configured My Movies URL redirected anonymously to Fandango at Home; no authenticated selector test was authorized | Yes | Perform an authorized live contract check before code changes or release |
+| N-2: canonical file lacks .py extension | Prior review | Confirmed | vuduupdatedbyOpenAI is extensionless and normal Python import fails | Yes | Rename to a conventional module name during consolidation |
+| N-3: no requirements file | Prior review | Confirmed | No requirements.txt, pyproject.toml, lockfile, or dependency metadata exists; Selenium is absent locally | Yes | Add a single authoritative dependency definition and supported-version policy |
+| N-4: alt-only title extraction is fragile | Prior review | Partially confirmed | collect_visible_titles reads only image alt; live failure was not observed | Yes | Validate current DOM and add selector fallbacks plus fixture coverage |
+| N-5: fixed polling sleep in scrolling | Prior review | Confirmed design risk | Current loop sleeps five times for 0.2 seconds after every scroll | Yes | Replace or augment with a count-change/ready-state wait and measure behavior |
+| N-6: os.makedirs empty-parent bug | Prior review | Already fixed / false positive | Current code uses dirname(abspath(out_path)), which is non-empty for a bare file name | No | Remove from active backlog; retain only a test for output paths |
+| N-7: login does not verify success | Prior review | Partially confirmed, with a confirmed weak predicate | The post-submit predicate only checks that the URL contains vudu.com, which is already true on the login URL | Yes | Wait for a post-authenticated library element or a known authenticated URL/state |
+| N-8: unconditional --no-sandbox | Prior review | Confirmed hardening concern | Current driver options always add --no-sandbox | Yes | Remove on normal desktops or make an explicit documented compatibility option |
+| N-9: --pass name is a reserved word concern | Prior review | Obsolete as a defect | argparse deliberately maps it to password; Python's reserved word does not cause a functional error | No | Prefer a clearer --password alias only as a compatibility UX improvement |
+| N-10: password in CLI arguments | Prior review | Confirmed local privacy concern | --pass is accepted and documented; shell history and local process viewers may expose it | Yes | Prefer environment variable or secure prompt input; document the tradeoff |
+| N-11: legacy placeholder credentials | Prior review | Partially confirmed | vudu.py contains example values, not a real secret; retaining an editable legacy script invites future accidental commits | Yes | Archive/remove legacy scripts and add a secret-scanning check once tooling exists |
+| N-12: three executable variants | Prior review | Confirmed | All three scripts remain executable source candidates with inconsistent behavior | Yes | Establish one canonical entry point and archive the rest |
+| N-13: legacy static ChromeDriver path | Prior review | Confirmed | Intermediate script retains a Windows-specific ChromeDriver path | Yes, only until legacy code is archived | Do not modernize the legacy copy; archive/remove it |
+| N-14: legacy magic scrolling values | Prior review | Confirmed | vudu.py still uses fixed nested scroll counts | Yes, only until legacy code is archived | Do not tune legacy behavior; archive/remove it |
+| N-15: README describes legacy interface | Prior review | Confirmed | README says credentials and CSV name are prompted; current script uses CLI/env configuration | Yes | Rewrite README after deciding the canonical name and install method |
+| SEC-1: no license | Prior review | Confirmed governance gap | No LICENSE is tracked | Yes, if the project is intended to be shared | Choose a license with the owner; do not infer one |
+| SEC-4: CAPTCHA/2FA handling | Prior review | Unable to verify | No live login was run and external service behavior is outside repository control | Possibly | Document expected manual authentication behavior; do not treat absence as a security vulnerability |
+| SEC-5: anti-detection flag may conflict with terms | Prior review | Risk requiring external review | --disable-blink-features=AutomationControlled is present; no terms source was verified | Yes | Review current service terms manually and remove unnecessary anti-detection behavior |
+| SEC-6: legacy output overwrites | Prior review | Confirmed legacy behavior | vudu.py uses a fixed Example2.csv name; current script lets the caller choose but still overwrites selected output | Yes, as UX policy | Resolve through legacy archival and an intentional overwrite policy for the current tool |
+| DOC-2: project guidance was too large/stale | Prior review | Resolved | Project-wide guidance now lives in concise AGENTS.md; CLAUDE.md is a Claude-specific pointer | No | Keep AGENTS.md current with code and planning documents |
+| DOC-5: repository link validity | Prior review | Already fixed | GitHub repository resolves through the connected service | No | Remove from active backlog |
+| DOC-6: no rebrand acknowledgment | Prior review | Partially confirmed | Docs use Vudu only; anonymous navigation shows Fandango at Home branding | Yes | Update naming and note that selectors require validation |
+| CI-1: add lint/type/smoke CI | Prior review | Confirmed need | No workflow or tool configuration exists; proposed import check cannot work until filename/module issue is fixed | Yes | Add CI after packaging and tests are defined |
+| CI-2: selector snapshot test | Prior review | Confirmed need | No fixtures or tests exist; third-party DOM is an external contract | Yes | Capture authorized, sanitized fixtures and test selectors without credentials |
 
-### AUDIT.md additions and directions
+### Reconciled additions and directions
 
 | Existing item | Current status | Verification and recommended action |
 | --- | --- | --- |
@@ -350,8 +350,8 @@ CLI experience still needs attention:
 | Document | Status | Problems | Recommended action |
 | --- | --- | --- | --- |
 | README.md | Update / replace | Describes legacy prompting flow and static ChromeDriver assumptions; lacks current installation, CLI, privacy, troubleshooting, project status, and Fandango at Home context | Rewrite after the canonical module and dependency contract are selected |
-| CLAUDE.md | Update and split | Contains useful implementation history and tasks, but stale date/revision metadata, outdated line references, duplicated roadmap material, and AI-specific detail mixed with human instructions | Keep as contributor/agent context; move canonical user setup and roadmap status elsewhere; update current file/branch facts |
-| AUDIT.md | Archive as historical | Good prior evidence but contains an obsolete os.makedirs bug claim and unverified/duplicated plans | Keep with a clear historical status; do not use as active backlog |
+| AGENTS.md | Keep | Repository-default agent guidance with current project constraints and validation limits | Keep project-wide instructions here and align it with current code, analysis, and roadmap |
+| CLAUDE.md | Keep minimal | Claude-specific entry point only | Point to AGENTS.md; do not duplicate project-wide guidance |
 | ANALYSIS.md | Keep | New canonical evidence-based audit | Update only after meaningful code, site-contract, or GitHub-state changes |
 | ROADMAP.md | Keep | New actionable plan tied to verified findings | Use as the one current planning tracker until work lands |
 | .gitignore | Update | Does not ignore local movie export CSV files | Add selected export patterns when output policy is decided |
@@ -364,7 +364,8 @@ CLI experience still needs attention:
 Recommended final documentation structure:
 
 - README.md: product status, supported platform, install, safe credential setup, run examples, output/privacy, troubleshooting, and current limitations.
-- CLAUDE.md or a concise contributor guide: code architecture, test guidance, and AI/developer conventions.
+- AGENTS.md: repository-default code architecture, test guidance, and agent/developer conventions.
+- CLAUDE.md: Claude-specific pointer only.
 - ANALYSIS.md and ROADMAP.md: current audit and ordered work until superseded.
 - docs/site-contract.md: dated, sanitized selector/login contract and fixture-refresh procedure once live validation is authorized.
 - LICENSE, SECURITY.md, and CONTRIBUTING.md only when their ownership and maintenance policies are decided.
@@ -451,7 +452,7 @@ No branches were deleted. The working tree was clean before documentation change
 5. Add DOM fixtures and tests, including empty, failed-login, and changed-selector behavior.
 6. Add minimal CI using the new module name and declared tools.
 7. Remove default --no-sandbox, reduce password CLI exposure, and ignore personal exports.
-8. Rewrite README and reconcile CLAUDE.md with code, Git state, and the new planning documents.
+8. Rewrite README and keep AGENTS.md aligned with code, Git state, and the planning documents.
 9. Improve GitHub metadata, templates, branch protection, and dependency automation.
 10. Consider TV support and export enhancements only after the above is complete.
 
