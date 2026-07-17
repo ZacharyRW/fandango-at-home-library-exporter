@@ -32,7 +32,7 @@ There is no confirmed critical exploit, secret leak, broken source compilation, 
 | PRIV-001 | Protect personal export files | Default and legacy CSV outputs are not ignored and can be staged accidentally | Output policy is documented; selected local export patterns or directory are ignored; a test/check proves exports are not staged by default |
 | SEC-001 | Remove unconditional Chrome --no-sandbox | It weakens normal desktop browser containment, even though the security scan found no reportable exploit path | Normal desktop runs do not set --no-sandbox; any container exception is explicit, opt-in, and documented |
 | PRIV-002 | Reduce credential exposure through CLI | --pass can expose credentials in shell history and local process arguments | README prefers VUDU_PASS or a no-echo prompt; compatibility behavior and warning are tested |
-| BR-001 | Resolve obsolete local master branch safely | Local master is fully merged into origin/main and tracks a gone remote | After audit work is merged and local use is confirmed absent, delete only the local master branch; do not rewrite history |
+| BR-001 | Resolve obsolete local master branch safely | Local master is fully merged into origin/main and tracks a gone remote | After local use is confirmed absent, delete only the local master branch; do not rewrite history |
 | GH-001 | Confirm main protection manually | main is already the remote default, but settings were not inspectable | Repository owner verifies protection/ruleset and chooses required checks after CI exists |
 
 Do not remove any secret in this phase: the legacy credential strings were verified placeholders, not a discovered secret. Do not delete branches automatically.
@@ -68,7 +68,7 @@ Phase 1 exit gate:
 | PERF-001 | Replace fixed scroll sleeps with page-state waiting | Improves speed and reliability based on observed behavior | Scroll completion waits on a measurable condition; the time limit remains bounded; behavior is tested with fakes/fixtures |
 | REL-002 | Add constrained retries and rate limiting | Handles transient browser/network failures responsibly | Retry policy has limits, backoff, logging, and no behavior intended to evade third-party controls |
 | DOC-001 | Rewrite README for the supported CLI | Align public onboarding with the working product | README includes install, safe credential setup, run examples, output/privacy, limitations, and troubleshooting |
-| DOC-002 | Reconcile CLAUDE.md and historical audits | Reduce drift while preserving useful history | CLAUDE.md points to the canonical module and current planning docs; AUDIT.md is labeled historical |
+| DOC-002 | Maintain repository-default agent guidance | Reduce drift between agent instructions, code, and plans | AGENTS.md is the project-wide default; CLAUDE.md contains only Claude-specific guidance and points to AGENTS.md |
 | DOC-003 | Create a site-contract/testing note | Centralizes changing external assumptions | A dated docs/site-contract.md or equivalent explains only sanitized selectors, fixtures, and refresh conditions |
 | GH-002 | Add contribution and issue workflow files | Makes maintenance predictable | Issue forms/template and PR template exist if outside contributions are invited; CONTRIBUTING.md matches actual local setup |
 | DEP-001 | Add dependency update and vulnerability review policy | Makes browser/dependency updates deliberate | Dependabot or a documented manual cadence exists after a manifest and CI are stable |
@@ -123,11 +123,10 @@ Complete documentation in this dependency order:
 1. Keep ANALYSIS.md and ROADMAP.md as the current evidence and plan while the stabilization work is open.
 2. After REL-001 and ARCH-001, rewrite README.md around the single supported command and dependency method.
 3. Add a sanitized site-contract/testing document while creating DOM fixtures.
-4. Update CLAUDE.md with the current module, actual validation commands, current branch facts, and links to the canonical analysis/roadmap; preserve useful history but remove stale claims.
-5. Label AUDIT.md as a historical snapshot or move it to a documented historical location without deleting it.
-6. Add CONTRIBUTING.md, SECURITY.md, issue templates, and a release checklist only when the maintenance policy and supported workflow are real.
-7. Add CHANGELOG.md only when versioned releases begin.
-8. Add LICENSE only after the owner selects a license; do not guess.
+4. Keep AGENTS.md aligned with the current module, validation commands, branch facts, and links to the canonical analysis/roadmap; keep CLAUDE.md Claude-specific only.
+5. Add CONTRIBUTING.md, SECURITY.md, issue templates, and a release checklist only when the maintenance policy and supported workflow are real.
+6. Add CHANGELOG.md only when versioned releases begin.
+7. Add LICENSE only after the owner selects a license; do not guess.
 
 ## GitHub Improvement Plan
 
@@ -144,13 +143,13 @@ Complete documentation in this dependency order:
 
 ### Safe to delete now
 
-None. This audit intentionally made no destructive branch change.
+None. No destructive branch change is authorized by this roadmap.
 
 ### Review before deletion
 
 | Item | State | Required check | Proposed action |
 | --- | --- | --- | --- |
-| Local master | Fully merged into origin/main, tracks gone origin/master, zero unique commits versus main | Confirm no local worktree, script, deployment, or personal workflow still refers to master | Delete locally only after this audit branch is merged or otherwise retained |
+| Local master | Fully merged into origin/main, tracks gone origin/master, zero unique commits versus main | Confirm no local worktree, script, deployment, or personal workflow still refers to master | Delete locally only after explicit owner confirmation |
 | Dangling commit 8f8b5d7 | Historical closed unmerged pull request 4 head | Confirm whether its PROJECT_AUDIT.md history is wanted | Preserve; do not run garbage collection as audit cleanup |
 
 ### Keep
@@ -158,7 +157,6 @@ None. This audit intentionally made no destructive branch change.
 | Branch | Reason |
 | --- | --- |
 | origin/main | Current default and authoritative remote branch |
-| docs/repository-audit | Current local documentation work until it is reviewed and merged |
 
 ### Rename or migrate
 
@@ -190,10 +188,10 @@ No branch migration is needed. The desired default branch, main, is already in u
 | PERF-001 | Event-driven scroll waiting | P2 | M | REL-001, TEST-002 | 2 | Bounded, measurable loading wait replaces blind polling |
 | DX-001 | Logging and diagnostics | P2 | M | ARCH-001, TEST-001 | 2 | Redacted diagnostics make failures actionable |
 | DOC-001 | README rewrite | P1 | S | SETUP-001, ARCH-001 | 2 | Public docs accurately install and run the project |
-| DOC-002 | CLAUDE/AUDIT reconciliation | P2 | S | DOC-001 | 2 | One current plan, preserved historical context, no stale code facts |
+| DOC-002 | Repository-default agent guidance | P2 | S | DOC-001 | 2 | AGENTS.md is current and Claude-specific guidance is isolated in CLAUDE.md |
 | GH-001 | Main branch/manual settings review | P1 | S | CI-001 for required checks | 0-2 | Owner confirms default/protection/ruleset behavior |
 | GH-002 | Contribution and issue workflow | P2 | S | DOC-001, CI-001 | 2 | Templates and guidance match actual maintenance practice |
-| BR-001 | Local master cleanup | P3 | S | Audit branch merged and user confirmation | 0 or after merge | Only obsolete local master is deleted; no remote/shared history changes |
+| BR-001 | Local master cleanup | P3 | S | User confirmation | 0 or after merge | Only obsolete local master is deleted; no remote/shared history changes |
 | FEAT-001 | TV-show export | P2 | M | Phase 1 exit gate | 3 | Product description and tested behavior match |
 | FEAT-002 | Export diff mode | P2 | M | Stable output schema and tests | 3 | Added/removed behavior is documented and tested |
 | FEAT-003 | JSON/SQLite output | P3 | M | Stable data model | 3 | Versioned schema and tests exist |
@@ -216,16 +214,15 @@ The roadmap is improving the project when these are true:
 
 ## Recommended Execution Order
 
-1. Retain the audit artifacts and decide whether to merge this documentation branch.
-2. Obtain explicit authorization and run REL-001 against a controlled account.
-3. Record the accepted site contract and create sanitized DOM fixtures.
-4. Implement BUG-001 and BUG-002 with tests.
-5. Implement ARCH-001 and SETUP-001 together in one focused migration, preserving a documented CLI compatibility choice.
-6. Add TEST-001, UX-001, PRIV-001, SEC-001, and PRIV-002.
-7. Rewrite README and reconcile CLAUDE.md/AUDIT.md.
-8. Add CI and configure GitHub main protections.
-9. Review local master for safe removal after current audit work is merged.
-10. Reassess FEAT-001 and FEAT-002 with real user value and the stable test baseline.
+1. Obtain explicit authorization and run REL-001 against a controlled account.
+2. Record the accepted site contract and create sanitized DOM fixtures.
+3. Implement BUG-001 and BUG-002 with tests.
+4. Implement ARCH-001 and SETUP-001 together in one focused migration, preserving a documented CLI compatibility choice.
+5. Add TEST-001, UX-001, PRIV-001, SEC-001, and PRIV-002.
+6. Rewrite README and maintain AGENTS.md/CLAUDE.md guidance.
+7. Add CI and configure GitHub main protections.
+8. Review local master for safe removal after explicit confirmation.
+9. Reassess FEAT-001 and FEAT-002 with real user value and the stable test baseline.
 
 ## Change Rules
 
