@@ -1,8 +1,8 @@
-# VuduList Agent Guide
+# Fandango at Home Library Exporter Agent Guide
 
 ## Project state
 
-VuduList is a local, personal-use Python/Selenium command-line tool intended to export movie titles from a Fandango at Home (formerly Vudu) library to CSV. It is a maintenance-stage prototype, not a release-ready product.
+Fandango at Home Library Exporter is a local, personal-use Python/Selenium command-line tool intended to export movie titles from a Fandango at Home (formerly Vudu) library to CSV. It is a maintenance-stage prototype, not a release-ready product.
 
 `ANALYSIS.md` is the current evidence record and `ROADMAP.md` is the canonical execution tracker. Verify both against the current code and Git state before treating an item as open.
 

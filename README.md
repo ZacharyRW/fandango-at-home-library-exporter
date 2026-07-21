@@ -1,4 +1,4 @@
-# VuduList
+# Fandango at Home Library Exporter
 A python program to login to your vudu account and scrape the names of the movies you own
 
 Before opening, it asks for your Vudu Username and Password
