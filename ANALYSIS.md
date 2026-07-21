@@ -4,7 +4,7 @@ Review snapshot: 2026-07-14 local time. Code was reviewed at commit 4a8b2365f827
 
 ## Executive Summary
 
-VuduList is a small local Python command-line tool intended to sign in to a personal Vudu, now Fandango at Home, account, collect movie titles from the browser-rendered library, and export them as CSV. Its intended user is an individual who wants a personal ownership inventory, not a hosted or multi-user audience.
+Fandango at Home Library Exporter is a small local Python command-line tool intended to sign in to a personal Fandango at Home (formerly Vudu) account, collect movie titles from the browser-rendered library, and export them as CSV. Its intended user is an individual who wants a personal ownership inventory, not a hosted or multi-user audience.
 
 The repository is best described as a maintenance-stage prototype rather than a release-ready utility. The current implementation has several good foundations: environment-variable credentials, explicit Selenium waits, bounded scrolling, clear exit codes, configurable driver selection, CSV output, and browser cleanup. The repository as a whole is held back by a missing dependency manifest, no tests or CI, stale public documentation, three competing executable implementations, and a fragile dependency on a third-party consumer website whose current authenticated DOM contract has not been verified.
 
