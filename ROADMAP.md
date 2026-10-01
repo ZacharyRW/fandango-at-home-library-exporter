@@ -126,7 +126,7 @@ Complete documentation in this dependency order:
 4. Keep AGENTS.md aligned with the current module, validation commands, branch facts, and links to the canonical analysis/roadmap; keep CLAUDE.md Claude-specific only.
 5. Add CONTRIBUTING.md, SECURITY.md, issue templates, and a release checklist only when the maintenance policy and supported workflow are real.
 6. Add CHANGELOG.md only when versioned releases begin.
-7. Add LICENSE only after the owner selects a license; do not guess.
+7. LICENSE: owner selected MIT on 2026-10-01 (explicit owner direction); LICENSE added in PR #9.
 
 ## GitHub Improvement Plan
 
