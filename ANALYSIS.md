@@ -141,7 +141,7 @@ This review searched all tracked files, Git history, local and remote branch met
 | N-13: legacy static ChromeDriver path | Prior review | Confirmed | Intermediate script retains a Windows-specific ChromeDriver path | Yes, only until legacy code is archived | Do not modernize the legacy copy; archive/remove it |
 | N-14: legacy magic scrolling values | Prior review | Confirmed | vudu.py still uses fixed nested scroll counts | Yes, only until legacy code is archived | Do not tune legacy behavior; archive/remove it |
 | N-15: README describes legacy interface | Prior review | Confirmed | README says credentials and CSV name are prompted; current script uses CLI/env configuration | Yes | Rewrite README after deciding the canonical name and install method |
-| SEC-1: no license | Prior review | Confirmed governance gap | No LICENSE is tracked | Yes, if the project is intended to be shared | Choose a license with the owner; do not infer one |
+| SEC-1: no license | Prior review | Resolved 2026-10-01 | No LICENSE was tracked | Yes — owner selected MIT on 2026-10-01 (explicit direction); LICENSE added in PR #9 | Done |
 | SEC-4: CAPTCHA/2FA handling | Prior review | Unable to verify | No live login was run and external service behavior is outside repository control | Possibly | Document expected manual authentication behavior; do not treat absence as a security vulnerability |
 | SEC-5: anti-detection flag may conflict with terms | Prior review | Risk requiring external review | --disable-blink-features=AutomationControlled is present; no terms source was verified | Yes | Review current service terms manually and remove unnecessary anti-detection behavior |
 | SEC-6: legacy output overwrites | Prior review | Confirmed legacy behavior | vudu.py uses a fixed Example2.csv name; current script lets the caller choose but still overwrites selected output | Yes, as UX policy | Resolve through legacy archival and an intentional overwrite policy for the current tool |
@@ -155,7 +155,7 @@ This review searched all tracked files, Git history, local and remote branch met
 
 | Existing item | Current status | Verification and recommended action |
 | --- | --- | --- |
-| ADD-1: archive legacy files, rename canonical file, add dependencies/license | Partially confirmed | Consolidation and dependency work are necessary; license choice requires owner direction. Do this after a live contract check, not as a blind rename. |
+| ADD-1: archive legacy files, rename canonical file, add dependencies/license | Partially confirmed | Consolidation and dependency work are necessary; license choice made by owner (MIT, 2026-10-01; LICENSE added in PR #9). Do this after a live contract check, not as a blind rename. |
 | ADD-2: revalidate current Fandango at Home site | Confirmed top priority | Anonymous redirect demonstrates branding change; only an authorized browser session can validate login and selectors. |
 | ADD-3: diff mode | Optional enhancement | Fits the product once reliable CSV output and tests exist. |
 | ADD-4: metadata enrichment | Optional enhancement | Useful but adds API, attribution, rate-limit, and data-quality dependencies. Defer. |
@@ -355,7 +355,7 @@ CLI experience still needs attention:
 | ANALYSIS.md | Keep | New canonical evidence-based audit | Update only after meaningful code, site-contract, or GitHub-state changes |
 | ROADMAP.md | Keep | New actionable plan tied to verified findings | Use as the one current planning tracker until work lands |
 | .gitignore | Update | Does not ignore local movie export CSV files | Add selected export patterns when output policy is decided |
-| LICENSE | Create, owner decision required | No license is present | Choose and add only after owner selects terms |
+| LICENSE | Done 2026-10-01 | Owner selected MIT (explicit direction); LICENSE added in PR #9 | Done |
 | CONTRIBUTING.md | Create if accepting outside contributions | No contribution workflow or setup contract | Add after packaging, tests, and CI exist |
 | SECURITY.md | Create if publicly maintained | No reporting path or scope statement | Add a short policy after deciding whether external reports are accepted |
 | CHANGELOG.md | Conditional | No releases exist | Add when versioned releases begin; do not invent historical entries |
@@ -368,7 +368,7 @@ Recommended final documentation structure:
 - CLAUDE.md: Claude-specific pointer only.
 - ANALYSIS.md and ROADMAP.md: current audit and ordered work until superseded.
 - docs/site-contract.md: dated, sanitized selector/login contract and fixture-refresh procedure once live validation is authorized.
-- LICENSE, SECURITY.md, and CONTRIBUTING.md only when their ownership and maintenance policies are decided.
+- SECURITY.md and CONTRIBUTING.md only when their ownership and maintenance policies are decided. (LICENSE done: owner selected MIT on 2026-10-01.)
 
 ## GitHub Repository Assessment
 
